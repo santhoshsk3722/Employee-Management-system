@@ -139,6 +139,33 @@ consistent JSON shape:
 }
 ```
 
+## Running with Docker
+
+```bash
+docker compose up --build
+```
+
+This builds the app image (multi-stage: Maven build → slim JRE runtime),
+starts a MySQL container, and wires the app to it via the `mysql` Spring
+profile. First boot takes a bit longer while MySQL initializes and Maven
+downloads dependencies — subsequent builds are cached.
+
+- App: http://localhost:8080/api/v1/employees
+- Health: http://localhost:8080/actuator/health
+- MySQL: `localhost:3306`, db `emsdb`, user `root`, password `password`
+
+Stop and remove containers:
+```bash
+docker compose down
+```
+Stop and also wipe the database volume:
+```bash
+docker compose down -v
+```
+
+See `docs/devops-roadmap.md` for the full path from here to a Jenkins +
+Kubernetes + Terraform + LocalStack pipeline.
+
 ## What's intentionally left out
 
 No `Dockerfile`, `docker-compose.yml`, `Jenkinsfile`, or any CI/CD config is
